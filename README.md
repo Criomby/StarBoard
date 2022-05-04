@@ -6,10 +6,9 @@
 <p align='center'>
   
   [![Badge](https://kdad0hcl2owx.runkit.sh)](https://git.io/gradientbadge)
-  [![Badge](https://badgen.net/github/license/Criomby/StarBoard)](https://badgen.net/)
   [![Badge](https://badgen.net/github/release/Criomby/StarBoard)](https://badgen.net/)
   [![Badge](https://badgen.net/github/open-issues/Criomby/StarBoard)](https://badgen.net/)
-  
+  [![Badge](https://badgen.net/badge/contact/Telegram/blue?icon=telegram)](https://t.me/criomby)
 </p>
 <br>
 
