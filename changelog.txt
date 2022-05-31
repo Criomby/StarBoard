@@ -1,0 +1,23 @@
+2.5 
+- regex pattern matching for status codes:
+  Matches 'oXXX' & 'OXXX' for status 'open' ("[o|O]p?e?n?\Z")
+  and equivalent for status 'closed' ("[c|C]l?o?s?e?d?\Z").
+- added status 'in progress';
+  matched by the status code itself or 'in progress' / 'ip' / 'i p' / 'IP' etc. ("[i|I]n?\s?[p|P]r?o?g?r?e?s?s?\Z")
+- if any of the 3 status codes mentioned above and its variations is recognized in the Notion data,
+  the corresponding status code and color will be displayed in the app (open, in progress, closed) and the row formatted accordingly
+- not recognized status codes will be dimmed
+--> significantly improves practical functionality
+    (code shorts e.g. 'o' and 'c' in Notion can be used saving time while full status code will still be displayed in the app),
+    reduces program code size and complexity
+- code refactoring
+
+2.4
+- outputs 'nothing to see here' in bright_black in notes table when table is empty
+
+2.3
+- account for capitalized letters, i.e. "Open" & "open", "Closed" & "closed",
+  since the web app may capitalize letters, or adjust for user preference
+- does intentionally not sort tables by task numbers, because you may want to 
+  custom sort tables with task numbers unrelated to the order of table items
+- starboard written logo letters appear every refresh in random colors
