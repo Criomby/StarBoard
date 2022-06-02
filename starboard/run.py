@@ -1,5 +1,5 @@
-# run v2.5
-from superboard import *
+# run v2.6
+from starboard import *
 
 
 def main():

@@ -6,6 +6,7 @@ from rich.padding import Padding
 from rich.table import Table
 from rich.prompt import Prompt
 from rich import box
+from user import User
 import requests
 import psutil
 from datetime import datetime
@@ -15,7 +16,7 @@ import json
 import sys
 import re
 
-__VERSION__ = 2.5
+__VERSION__ = "2.6"
 
 # adjust console size with your own values before using
 console = Console(height=66)  # full size: height: 66, width: 240 (ASUS VE248)
@@ -133,7 +134,7 @@ class Dashboard:
                                              align='center'))
         self.layout['top_mid'].update(Align(Panel(self.gen_logo(),
                                                   box=box.SQUARE,
-                                                  style='bright_black'),
+                                                  style='black'),
                                             align='center'))
         self.layout['top_right'].update(Align(Panel(self.score_total,
                                                     box=box.SQUARE),
@@ -177,14 +178,7 @@ class Dashboard:
                     description = self.daily_data[f'row_{i}'][1]
 
                 # format prio cell
-                # if prio == 1, then red number (prio in column index 2)
-                if self.daily_data[f'row_{i}'][2] == '1':
-                    prio = '[red]1'
-                elif self.daily_data[f'row_{i}'][2] == '1' and self.pattern_inprogress.match(
-                        self.daily_data[f'row_{i}'][3]):
-                    prio = "[bright_red]1"
-                else:
-                    prio = self.daily_data[f'row_{i}'][2]
+                prio = self.format_prio(self.daily_data[f'row_{i}'][2], self.daily_data[f'row_{i}'][3])
 
                 table.add_row(
                     task_num,
@@ -221,14 +215,7 @@ class Dashboard:
                     description = self.general_data[f'row_{i}'][1]
 
                 # format prio cell
-                # if prio == 1, then red number (prio in column index 2)
-                if self.general_data[f'row_{i}'][2] == '1':
-                    prio = '[red]1'
-                elif self.general_data[f'row_{i}'][2] == '1' and self.pattern_inprogress.match(
-                        self.general_data[f'row_{i}'][3]):
-                    prio = "[bright_red]1"
-                else:
-                    prio = self.general_data[f'row_{i}'][2]
+                prio = self.format_prio(self.general_data[f'row_{i}'][2], self.general_data[f'row_{i}'][3])
 
                 table.add_row(
                     task_num,
@@ -289,20 +276,17 @@ class Dashboard:
         """
         time_start = time.time()
         if _type == 'daily':
-            # UPDATE WITH YOUR OWN URL
-            url = "https://api.notion.com/v1/blocks/XXX/children?page_size=100"
+            url = f"https://api.notion.com/v1/blocks/{User.daily_block_id}/children?page_size=100"
         elif _type == 'general':
-            # UPDATE WITH YOUR OWN URL
-            url = "https://api.notion.com/v1/blocks/XXX/children?page_size=100"
+            url = f"https://api.notion.com/v1/blocks/{User.general_block_id}/children?page_size=100"
         else:
             print('"type" argument has to be one of ["daily", "general"]')
             sys.exit(1)
 
-        # UPDATE WITH YOUR OWN API ACCESS TOKEN
         headers = {
             "Accept": "application/json",
             "Notion-Version": "2022-02-22",
-            "Authorization": "XXX"
+            "Authorization": User.access_token,
         }
 
         response = requests.request("GET", url, headers=headers)
@@ -328,15 +312,12 @@ class Dashboard:
         returns the update time
         """
         time_start = time.time()
+        url = f"https://api.notion.com/v1/blocks/{User.notes_block_id}/children?page_size=100"
 
-        # UPDATE WITH YOUR OWN URL
-        url = "https://api.notion.com/v1/blocks/XXX/children?page_size=100"
-
-        # UPDATE WITH YOUR OWN API ACCESS TOKEN AS ABOVE
         headers = {
             "Accept": "application/json",
             "Notion-Version": "2022-02-22",
-            "Authorization": "XXX"
+            "Authorization": User.access_token,
         }
 
         response = requests.request("GET", url, headers=headers)
@@ -404,20 +385,55 @@ class Dashboard:
 
     def convert_status_code(self, status_field):
         """
-        Converts Notion status codes (Status column field) to full code + color if matched with pattern.
-        If no pattern is matched, code sill be output dimmed.
+        Converts status codes received from Notion (Status column field) to full code + color if matched with pattern.
+        If no pattern is matched, code will be output dimmed.
 
         :return:
         Full colored status code according to matched pattern.
         """
         if self.pattern_open.match(status_field):
-            return "[yellow]open"
+            return "[bright_yellow]open"
         elif self.pattern_inprogress.match(status_field):
-            return "[magenta]in progress"
+            return "[bright_magenta]in progress"
         elif self.pattern_closed.match(status_field):
             return "[green]closed"
         else:
             return "[dim]" + status_field
+
+    def format_prio(self, prio_field, row_status):
+        """
+        Converts Notion prio codes (Prio column field) color.
+        If none of [1, 2, 3] field will be output dimmed.
+
+        :return:
+        Colored prio code.
+        """
+        # format based on status code
+        # open
+        if self.pattern_open.match(row_status):
+            # if prio == 1, then red number (prio in column index 2)
+            if prio_field == '1':
+                prio = '[red]1'
+            # else normal number color
+            else:
+                prio = prio_field
+        # in progress
+        if self.pattern_inprogress.match(row_status):
+            # if prio == 1, then bright red number
+            if prio_field == '1':
+                prio = '[bright_magenta]1'
+            # else bright white number color
+            else:
+                prio = "[bright_white]" + prio_field
+        # closed
+        elif self.pattern_closed.match(row_status):
+            # if prio == 1, then dim red number
+            if prio_field == '1':
+                prio = "[dim][red]1"
+            # else dim (white) number color
+            else:
+                prio = "[dim]" + prio_field
+        return prio
 
 
 def gen_progress_bar(iteration, total, prefix='', suffix='', decimals=1, length=40, fill='█'):
