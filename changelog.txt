@@ -1,3 +1,11 @@
+2.6
+- status color values changed for better readability
+- logo frame removed
+- Fixed bug: 'Prio' cell not dimmed when row status == 'closed'
+- user data (Notion access tokens / API keys) outsourced to new external script
+  for easier setup and better maintainability (user.py)
+- refactoring
+
 2.5 
 - regex pattern matching for status codes:
   Matches 'oXXX' & 'OXXX' for status 'open' ("[o|O]p?e?n?\Z")
