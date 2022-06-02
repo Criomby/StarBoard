@@ -17,7 +17,8 @@ Imagine it like a digital whiteboard for to organize your dialy tasks in an effi
 <br>
 
 <h1>Features</h1>
-<h2>TODO</h2>
+<h2><a href="https://www.philippebraum.com/blog">See my blog</a></h2>
+<br>
 <br>
 <br>
 
