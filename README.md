@@ -15,6 +15,8 @@
 StarBoard is a dashboard for your daily notes.<br>
 Imagine it like a digital whiteboard for to organize your dialy tasks in an efficient, practical and visually pleasing manner.<br>
 <br>
+<br>
+<br>
 
 <h1>Features</h1>
 <h2><a href="https://www.philippebraum.com/blog">See my blog</a></h2>
