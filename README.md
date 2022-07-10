@@ -41,9 +41,9 @@ The Notes page has to contain a table with just one column:<br>
 <h2>2. Notion API token & block id's</h2>
 <ol>
   <li>Configure your account to be accessible via the API: <a href="https://developers.notion.com/reference/intro">official documentation</a></li>
-  <li><a href="https://developers.notion.com/docs/authorization">G the API access token.</a></li>
+  <li><a href="https://developers.notion.com/docs/authorization">Get the API access token.</a></li>
   <li><a href="https://stackoverflow.com/questions/67618449/how-to-get-the-block-id-in-notion-api">Get the block id of each of the 3 tables (Daily, General, Notes).</a></li>
-  <li><b>Enter API key and the 3 block id's into the <a href=""><b>user.py</b></a> script.</b></li>
+  <li><b>Enter API key and the 3 block id's into the <a href="https://github.com/Criomby/StarBoard/blob/main/starboard/user.py"><b>user.py</b></a> script.</b></li>
 </ol>
 :heavy_check_mark: <b>SETUP DONE!</b><br>
 <br>
